@@ -1,26 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="./bower_components/angular/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="./bower_components/papa-parse/papaparse.min.js"></script>
   <!-- <link rel="stylesheet" href="style.css"/> -->
-  <script src="app.js"></script>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <form method="post" action="localhost:6474/firstUpload" name="submit">
-    Upload file 1:<input type="file" name="fileField"><br><br>
-    <input type="submit" name="submit" value="Submit">
-  </form>
-  <br>
-  <form method="post" action="localhost:6474/secondUpload" name="submit">
-    Upload file 2:<input type="file" name="fileField"><br><br>
-    <input type="submit" name="submit" value="Submit">
-  </form>
+  <input type="file" id="files" name="files[]" multiple />
+  <output id="list"></output>
 
-
-  <div ng-app='dataHero' ng-controller='load' ng-init='query()'>
-  </div>
 </body>
 
 
+<script src="app.js"></script>
 </html>

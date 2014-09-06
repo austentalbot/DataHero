@@ -1,0 +1,21 @@
+{
+  "name": "DataHero",
+  "version": "0.0.0",
+  "homepage": "https://github.com/austentalbot/DataHero",
+  "authors": [
+    "Austen Talbot <austentalbot@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ng-file-upload": "~1.6.5",
+    "angular": "~1.2.23",
+    "papa-parse": "~3.1.2"
+  }
+}
