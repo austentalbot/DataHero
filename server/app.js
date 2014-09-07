@@ -9,29 +9,22 @@ app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
 app.use(bodyParser.json({limit: '50mb'}));
 
 
-app.post('/firstUpload', function(req, res){
-  console.log('intercepted');
-  console.log(req);
+app.get('/employee', function(req, res){
+  console.log('intercepted employee');
+  console.log(req.query);
   res.status(200).send();
 });
 
-app.post('/secondUpload', function(req, res){
-  console.log('intercepted');
-  console.log(req);
-  res.status(200);
-});
-
-app.post('*', function(req, res){
-  console.log('intercepted');
-  console.log(req);
-  res.status(200);
+app.get('/salary', function(req, res){
+  console.log('intercepted salary');
+  console.log(req.query);
+  res.status(200).send();
 });
 
 app.get('*', function(req, res){
-  console.log('intercepted');
-  console.log(req);
-  res.send('Hello world');
-  res.status(200);
+  console.log('intercepted other');
+  console.log(req.body);
+  res.status(200).send();
 });
 
 var server = app.listen(port, function(){
