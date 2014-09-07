@@ -5,6 +5,7 @@ var port = process.env.PORT || 6474;
 var cors=require('cors');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var formidable = require('formidable');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
@@ -57,22 +58,35 @@ connection.query('CREATE TABLE employees ( \
 
 app.post('/employee', function(req, res){
   console.log('intercepted employee');
+  //parse incoming file
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    if (err) {
+      throw err;
+    }
+    console.log(files);
+    res.status(200).sendFile(__dirname + '/views/salaryUploadView.html');;
+  });
 
-  res.status(200).send('<h3>Upload salary data</h3>' +
-    '<form action="http://127.0.0.1:6474/salary" enctype="multipart/form-data" method="post">' +
-      '<input type="file" name="upload" multiple="multiple"><br>' +
-      '<input type="submit" value="Upload">' +
-    '</form>');
 });
 
 app.post('/salary', function(req, res){
   console.log('intercepted salary');
-  res.status(200).send();
+  //parse incoming file
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files) {
+    if (err) {
+      throw err;
+    }
+    console.log(files);
+    res.status(200).sendFile(__dirname + '/views/dataView.html');;
+  });
+
 });
 
 app.get('*', function(req, res){
   console.log('intercepted other');
-  res.status(200).send();
+  res.status(200).sendFile(__dirname + '/views/employeeUploadView.html');;
 });
 
 var server = app.listen(port, function(){
