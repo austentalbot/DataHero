@@ -7,13 +7,12 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <h3>Upload employee data</h3>
-  <input type="file" id="employeeFile" name="files[]" multiple />
-  <output id="list"></output>
 
-  <h3>Upload salary data</h3>
-  <input type="file" id="salaryFile" name="files[]" multiple />
-  <output id="list"></output>
+    <h3>Upload employee data</h3>
+    <form action="http://127.0.0.1:6474/employee" enctype="multipart/form-data" method="post">
+      <input type="file" name="upload" multiple="multiple"><br>
+      <input type="submit" value="Upload">
+    </form>  
 
 </body>
 
