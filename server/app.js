@@ -25,13 +25,13 @@ if (process.env.PORT===undefined) {
   };
 }
 
-// var connection = mysql.createPool({
-//   connectionLimit: 4,
-//   host: credentials.dbHost,
-//   user: credentials.dbUser,
-//   password: credentials.dbPassword,
-//   database: credentials.database
-// });
+var connection = mysql.createPool({
+  connectionLimit: 4,
+  host: credentials.dbHost,
+  user: credentials.dbUser,
+  password: credentials.dbPassword,
+  database: credentials.database
+});
 
 
 //create employee table
@@ -49,14 +49,11 @@ connection.query('CREATE TABLE employees ( \
 });
 */
 
-// var employee = ["86679", "1964-07-09", "Chaitali", "Gargeya", "M", "1997-01-06"];
-// connection.query('SELECT * from employees;', function(err, rows, fields) {
-// // connection.query('INSERT INTO employees values (?, ?, ?, ?, ?, ?);', employee, function(err, rows, fields) {
-//   if (err) throw err;
-//   console.log(rows);
-// });
 
-
+connection.query('SELECT * from employees;', function(err, rows, fields) {
+  if (err) throw err;
+  console.log(rows);
+});
 
 app.post('/employee', function(req, res){
   console.log('intercepted employee');
@@ -78,18 +75,28 @@ app.post('/employee', function(req, res){
       console.log(csvStr);
       babyparse.parse(csvStr, {
         complete: function(results, file) {
-          console.log("Parsing complete:", results, file);
+          console.log(results.data);
+          //drop and recreate employees table
+          connection.query('DROP TABLE employees?;', function() {
+            connection.query('CREATE TABLE employees ( \
+                            employee_id int, \
+                            birthday date, \
+                            firstname varchar(50), \
+                            lastname varchar(50), \
+                            sex char(1), \
+                            start_date date);', function() {
+              connection.query('INSERT INTO employees VALUES ?;', [results.data], function(err, rows, fields) {
+                if (err) throw err;
+                console.log(rows);
+                console.log('added to db');
+                res.status(200).sendFile(__dirname + '/views/salaryUploadView.html');;
+              });
+            });
+          });
         }
       });
     });
 
-    // connection.query("LOAD DATA INFILE ? INTO TABLE employees FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n';", files.upload.path + '/' + files.upload.name, function(err, rows, fields) {
-    //   if (err) throw err;
-    //   console.log(rows);
-    // });
-
-
-    res.status(200).sendFile(__dirname + '/views/salaryUploadView.html');;
   });
 
 });
