@@ -34,7 +34,7 @@
       return $http({
         url: 'http://127.0.0.1:6474/salaryHistory',
         method: 'GET',
-        data: {firstName: firstName, lastName: lastName}
+        params: {firstName: firstName, lastName: lastName} 
       });
     };
 

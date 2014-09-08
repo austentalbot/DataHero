@@ -142,10 +142,26 @@ app.post('/salary', function(req, res){
 });
 
 app.get('/employees', function(req, res) {
+  console.log('loading');
   connection.query('SELECT DISTINCT firstname, lastname FROM employees ORDER BY lastname ASC;', function(err, rows, fields) {
+    if (err) {
+      throw err;
+    }
+    console.log('sending back');
     res.status(200).send(rows);
-  });  
+  });
 });
+
+app.get('/salaryHistory', function(req, res) {
+  console.log(req.query);
+  connection.query('SELECT firstname, lastname, salaries.employee_id, salary, start_of_salary, end_of_salary FROM salaries \
+    JOIN employees on salaries.employee_id = employees.employee_id \
+    WHERE employees.firstname = ? AND employees.lastname = ? \
+    ORDER BY start_of_salary ASC;', [req.query.firstName, req.query.lastName],function(err, rows, fields) {
+    res.status(200).send(rows);
+  });
+});
+
 
 app.get('*', function(req, res){
   console.log('intercepted other');
