@@ -1,23 +1,62 @@
 <html>
 <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
-
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <h4>Employee salary data</h4>
+    <h3>Employee salary data</h3>
     <div ng-app='dh' ng-controller='load' ng-init='loadContacts()'>
-      <div>{{selected.firstname}} {{selected.lastname}}</div>
-      <ul ng-repeat='salary in salaryHistory'>
-        <li> {{salary.start_of_salary.slice(0, 10)}} to {{formatEndDate(salary.end_of_salary)}}: {{salary.salary  | currency}}</li>
-      </ul>
-      <ul ng-repeat='contact in contacts' repeat-complete>
-        <li class='user' data-firstname='{{contact.firstname}}' data-lastname='{{contact.lastname}}'>{{contact.lastname}}, {{contact.firstname}}</li>
-      </ul>
+      <div class='salary'>
+        <h4>{{selected.firstname}} {{selected.lastname}}</h4>
+        <ul ng-repeat='salary in salaryHistory'>
+          <li> {{salary.start_of_salary.slice(0, 10)}} to {{formatEndDate(salary.end_of_salary)}}: {{salary.salary  | currency}}</li>
+        </ul>
+      </div>
+      <div ng-repeat='contact in contacts' repeat-complete>
+        <div class='user button' data-firstname='{{contact.firstname}}' data-lastname='{{contact.lastname}}'>{{contact.lastname}}, {{contact.firstname}}</div>
+      </div>
 
     </div>
 
 </body>
+<style>
+  body {
+    font-family: 'Open Sans';
+    font-size: 15px;
+  }
+  .salary {
+    border: 1px solid black;
+    width: 350px;
+    padding: 2px;
+  }
+
+  .button {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #3AB6B5;
+    color: white;
+    margin: 2px;
+    height: 30px;
+    width: 200px;
+    line-height: 30px;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    background-color: #44C0BF;
+  }
+  .button:active {
+    background-color: #219D9C;
+  }
+
+</style>
 <script>
   var app = angular.module('dh', []);
 
