@@ -62,28 +62,36 @@ app.post('/employee', function(req, res){
     if (err) {
       throw err;
     }
-    console.log(files);
+    // console.log(files);
 
     fs.readFile(files.upload.path, function (err, csv) {
       if (err) {
         throw err; 
       }
       var csvStr = csv.toString();
-      console.log(csvStr);
+      // console.log(csvStr);
       babyparse.parse(csvStr, {
         complete: function(results, file) {
-          console.log(results.data);
+          // console.log(results.data);
           //drop and recreate employees table
-          connection.query('DROP TABLE employees?;', function() {
+          connection.query('DROP TABLE IF EXISTS employees;', function(err) {
+            if (err) {
+              throw err;
+            }
             connection.query('CREATE TABLE employees ( \
               employee_id int, \
               birthday date, \
               firstname varchar(50), \
               lastname varchar(50), \
               sex char(1), \
-              start_date date);', function() {
+              start_date date);', function(err) {
+              if (err) {
+                throw err;
+              }
               connection.query('INSERT INTO employees VALUES ?;', [results.data], function(err, rows, fields) {
-                if (err) throw err;
+                if (err) {
+                  throw err;
+                }
                 // console.log(rows);
                 console.log('added to db');
                 res.status(200).sendFile(__dirname + '/views/salaryUploadView.html');;
@@ -119,14 +127,22 @@ app.post('/salary', function(req, res){
         complete: function(results, file) {
           // console.log(results.data);
           //drop and recreate employees table
-          connection.query('DROP TABLE salaries?;', function() {
+          connection.query('DROP TABLE IF EXISTS salaries;', function(err) {
+            if (err) {
+              throw err;
+            }
             connection.query('CREATE TABLE salaries ( \
               employee_id int, \
               salary int, \
               start_of_salary date, \
-              start_of_salary date);', function() {
+              end_of_salary date);', function(err) {
+              if (err) {
+                throw err;
+              }
               connection.query('INSERT INTO salaries VALUES ?;', [results.data], function(err, rows, fields) {
-                if (err) throw err;
+                if (err) {
+                  throw err;
+                }
                 // console.log(rows);
                 console.log('added to db');
                 res.status(200).sendFile(__dirname + '/views/dataView.html');;
@@ -154,7 +170,7 @@ app.get('/employees', function(req, res) {
 
 app.get('/salaryHistory', function(req, res) {
   console.log(req.query);
-  connection.query('SELECT firstname, lastname, salaries.employee_id, salary, start_of_salary, end_of_salary FROM salaries \
+  connection.query('SELECT DISTINCT firstname, lastname, salaries.employee_id, salary, start_of_salary, end_of_salary FROM salaries \
     JOIN employees on salaries.employee_id = employees.employee_id \
     WHERE employees.firstname = ? AND employees.lastname = ? \
     ORDER BY start_of_salary ASC;', [req.query.firstName, req.query.lastName],function(err, rows, fields) {
@@ -165,7 +181,6 @@ app.get('/salaryHistory', function(req, res) {
 
 app.get('*', function(req, res){
   console.log('intercepted other');
-  console.log(req);
   res.status(200).sendFile(__dirname + '/views/employeeUploadView.html');;
 });
 
