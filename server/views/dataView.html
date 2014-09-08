@@ -2,10 +2,15 @@
 <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+
 </head>
 <body>
     <h4>Employee salary data</h4>
     <div ng-app='dh' ng-controller='load' ng-init='loadContacts()'>
+      <div>{{selected.firstname}} {{selected.lastname}}</div>
+      <ul ng-repeat='salary in salaryHistory'>
+        <li> {{salary.start_of_salary.slice(0, 10)}} to {{formatEndDate(salary.end_of_salary)}}: {{salary.salary  | currency}}</li>
+      </ul>
       <ul ng-repeat='contact in contacts' repeat-complete>
         <li class='user' data-firstname='{{contact.firstname}}' data-lastname='{{contact.lastname}}'>{{contact.lastname}}, {{contact.firstname}}</li>
       </ul>
@@ -18,7 +23,8 @@
 
   app.controller('load', function($http, $scope, $rootScope) {
 
-
+    $rootScope.selected = {};
+    $rootScope.salaryHistory = [];
     $scope.contacts = [];
     $scope.loadContacts = function() {
       $http({
@@ -28,6 +34,14 @@
         console.log(data);     
         $scope.contacts = data;
       });
+    };
+
+    $scope.formatEndDate = function(date) {
+      if (date[0]==='9') {
+        return 'Present';
+      } else {
+        return date.slice(0, 10);
+      }
     };
 
     $rootScope.getSalary = function(firstName, lastName) {
@@ -45,9 +59,13 @@
     return function(scope, element, attrs) {
       if (scope.$last){
         $('.user').on('click', function() {
-          $rootScope.getSalary(this.getAttribute('data-firstname'), this.getAttribute('data-lastname'))
+          var firstname = this.getAttribute('data-firstname');
+          var lastname = this.getAttribute('data-lastname');
+          $rootScope.getSalary(firstname, lastname)
           .success(function(data) {
             console.log(data);
+            $rootScope.selected = {firstname: firstname, lastname: lastname};
+            $rootScope.salaryHistory = data;
           });
         });
       }
