@@ -34,26 +34,23 @@ var connection = mysql.createPool({
 });
 
 
-//create employee table
-// employee_id / birthdate / firstname / lastname / sex / start_date
-/*
-connection.query('CREATE TABLE employees ( \
-                employee_id int, \
-                birthday date, \
-                firstname varchar(50), \
-                lastname varchar(50), \
-                sex char(1), \
-                start_date date);', function(err, rows, fields) {
-  if (err) throw err;
-  console.log(rows);
-});
-*/
+//create salary table
+// employee_id / salary / start_of_salary / end_of_salary
+
+// connection.query('CREATE TABLE salaries ( \
+//                 employee_id int, \
+//                 salary int, \
+//                 start_of_salary date, \
+//                 end_of_salary date);', function(err, rows, fields) {
+//   if (err) throw err;
+//   console.log(rows);
+// });
 
 
-connection.query('SELECT * from employees;', function(err, rows, fields) {
-  if (err) throw err;
-  console.log(rows);
-});
+// connection.query('SELECT * from employees;', function(err, rows, fields) {
+//   if (err) throw err;
+//   console.log(rows);
+// });
 
 app.post('/employee', function(req, res){
   console.log('intercepted employee');
@@ -79,15 +76,15 @@ app.post('/employee', function(req, res){
           //drop and recreate employees table
           connection.query('DROP TABLE employees?;', function() {
             connection.query('CREATE TABLE employees ( \
-                            employee_id int, \
-                            birthday date, \
-                            firstname varchar(50), \
-                            lastname varchar(50), \
-                            sex char(1), \
-                            start_date date);', function() {
+              employee_id int, \
+              birthday date, \
+              firstname varchar(50), \
+              lastname varchar(50), \
+              sex char(1), \
+              start_date date);', function() {
               connection.query('INSERT INTO employees VALUES ?;', [results.data], function(err, rows, fields) {
                 if (err) throw err;
-                console.log(rows);
+                // console.log(rows);
                 console.log('added to db');
                 res.status(200).sendFile(__dirname + '/views/salaryUploadView.html');;
               });
@@ -104,15 +101,50 @@ app.post('/employee', function(req, res){
 app.post('/salary', function(req, res){
   console.log('intercepted salary');
   //parse incoming file
+
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
     if (err) {
       throw err;
     }
-    console.log(files);
-    res.status(200).sendFile(__dirname + '/views/dataView.html');;
+    // console.log(files);
+
+    fs.readFile(files.upload.path, function (err, csv) {
+      if (err) {
+        throw err; 
+      }
+      var csvStr = csv.toString();
+      // console.log(csvStr);
+      babyparse.parse(csvStr, {
+        complete: function(results, file) {
+          // console.log(results.data);
+          //drop and recreate employees table
+          connection.query('DROP TABLE salaries?;', function() {
+            connection.query('CREATE TABLE salaries ( \
+              employee_id int, \
+              salary int, \
+              start_of_salary date, \
+              start_of_salary date);', function() {
+              connection.query('INSERT INTO salaries VALUES ?;', [results.data], function(err, rows, fields) {
+                if (err) throw err;
+                // console.log(rows);
+                console.log('added to db');
+                res.status(200).sendFile(__dirname + '/views/dataView.html');;
+              });
+            });
+          });
+        }
+      });
+    });
+
   });
 
+});
+
+app.get('/employees', function(req, res) {
+  connection.query('SELECT DISTINCT firstname, lastname from employees;', function(err, rows, fields) {
+    res.status(200).send(rows);
+  });  
 });
 
 app.get('*', function(req, res){
@@ -123,3 +155,4 @@ app.get('*', function(req, res){
 var server = app.listen(port, function(){
   console.log('Server is listening on port ' + port);
 });
+
