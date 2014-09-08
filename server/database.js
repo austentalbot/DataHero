@@ -1,6 +1,7 @@
 var babyparse = require('babyparse');
 var mysql = require('mysql');
 var formidable = require('formidable');
+var fs = require('fs');
 
 if (process.env.PORT===undefined) {
   var credentials = require('./credentials.js');
@@ -41,6 +42,100 @@ database = {
       res.status(200).send(rows);
     });
   },
+  addEmployeeData: function(req, res) {
+    //parse incoming file
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+      if (err) {
+        throw err;
+      }
+      // console.log(files);
+      fs.readFile(files.upload.path, function (err, csv) {
+        if (err) {
+          throw err; 
+        }
+        var csvStr = csv.toString();
+        // console.log(csvStr);
+        babyparse.parse(csvStr, {
+          complete: function(results, file) {
+            // console.log(results.data);
+            //drop and recreate employees table
+            connection.query('DROP TABLE IF EXISTS employees;', function(err) {
+              if (err) {
+                throw err;
+              }
+              connection.query('CREATE TABLE employees ( \
+                employee_id int, \
+                birthday date, \
+                firstname varchar(50), \
+                lastname varchar(50), \
+                sex char(1), \
+                start_date date);', function(err) {
+                if (err) {
+                  throw err;
+                }
+                connection.query('INSERT INTO employees VALUES ?;', [results.data], function(err, rows, fields) {
+                  if (err) {
+                    throw err;
+                  }
+                  // console.log(rows);
+                  console.log('added to db');
+                  res.status(200).sendFile(__dirname + '/views/salaryUploadView.html');;
+                });
+              });
+            });
+          }
+        });
+      });
+    });
+  },
+  addSalaryData: function(req, res) {
+    //parse incoming file
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+      if (err) {
+        throw err;
+      }
+      // console.log(files);
+
+      fs.readFile(files.upload.path, function (err, csv) {
+        if (err) {
+          throw err; 
+        }
+        var csvStr = csv.toString();
+        // console.log(csvStr);
+        babyparse.parse(csvStr, {
+          complete: function(results, file) {
+            // console.log(results.data);
+            //drop and recreate employees table
+            connection.query('DROP TABLE IF EXISTS salaries;', function(err) {
+              if (err) {
+                throw err;
+              }
+              connection.query('CREATE TABLE salaries ( \
+                employee_id int, \
+                salary int, \
+                start_of_salary date, \
+                end_of_salary date);', function(err) {
+                if (err) {
+                  throw err;
+                }
+                connection.query('INSERT INTO salaries VALUES ?;', [results.data], function(err, rows, fields) {
+                  if (err) {
+                    throw err;
+                  }
+                  // console.log(rows);
+                  console.log('added to db');
+                  res.status(200).sendFile(__dirname + '/views/dataView.html');;
+                });
+              });
+            });
+          }
+        });
+      });
+
+    });    
+  }
 
 };
 
