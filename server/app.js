@@ -8,6 +8,7 @@ var mysql = require('mysql');
 var formidable = require('formidable');
 var fs = require('fs');
 var babyparse = require('babyparse');
+var url = require('url');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
@@ -178,10 +179,23 @@ app.get('/salaryHistory', function(req, res) {
   });
 });
 
+app.get('/style.css', function(req, res){
+  console.log('intercepted style.css');
+  res.status(200).sendFile(__dirname + '/css/style.css');
+});
+
+app.get('/client.js', function(req, res){
+  console.log('intercepted client.js');
+  res.status(200).sendFile(__dirname + '/js/client.js');
+});
 
 app.get('*', function(req, res){
+  var pathname=url.parse(req.url, true).pathname;
+  console.log(pathname);
+
   console.log('intercepted other');
-  res.status(200).sendFile(__dirname + '/views/employeeUploadView.html');;
+  console.log(req.query);
+  res.status(200).sendFile(__dirname + '/views/employeeUploadView.html');
 });
 
 var server = app.listen(port, function(){
