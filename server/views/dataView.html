@@ -2,6 +2,7 @@
 <head>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js"></script>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -13,6 +14,7 @@
           <li> {{salary.start_of_salary.slice(0, 10)}} to {{formatEndDate(salary.end_of_salary)}}: {{salary.salary  | currency}}</li>
         </ul>
       </div>
+      <canvas id='chart'></canvas>
       <div ng-repeat='contact in contacts' repeat-complete>
         <div class='user button' data-firstname='{{contact.firstname}}' data-lastname='{{contact.lastname}}'>{{contact.lastname}}, {{contact.firstname}}</div>
       </div>
@@ -91,6 +93,45 @@
       });
     };
 
+    $rootScope.createChart = function(salaryHistory) {
+      var ctx = document.getElementById('chart').getContext("2d");
+      ctx.canvas.width = 600;
+      ctx.canvas.height = 300;
+
+      var labels = [];
+      var values = [];
+      for (var i=0; i<salaryHistory.length; i++) {
+        var salary = salaryHistory[i];
+        var label = '';
+        label+=salary.start_of_salary.slice(0, 10);
+        label+=' to ';
+        label+=$scope.formatEndDate(salary.end_of_salary);
+        labels.push(label);
+
+        values.push(salary.salary);
+      }
+
+      var data = {
+        labels: labels,
+        datasets: [{
+          label: 'Salary history',
+          fillColor: "rgba(68,191,135,0.2)",
+          strokeColor: "rgba(68,191,135,1)",
+          highlightFill: "rgba(68,191,135,1)",
+          highlightStroke: "rgba(220,220,220,1)",
+          data: values
+        }]
+      };
+
+      var options = {
+        scaleBeginAtZero: true,
+        scaleLabel: "$<%=value%>"
+      };
+
+      var barChart = new Chart(ctx).Bar(data, options);
+
+    };
+
   });
 
   //add event listener after users have been loaded
@@ -103,6 +144,7 @@
           $rootScope.getSalary(firstname, lastname)
           .success(function(data) {
             console.log(data);
+            $rootScope.createChart(data);
             $rootScope.selected = {firstname: firstname, lastname: lastname};
             $rootScope.salaryHistory = data;
           });
