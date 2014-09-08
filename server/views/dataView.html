@@ -1,18 +1,29 @@
 <html>
 <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
 </head>
 <body>
     <h4>Employee salary data</h4>
+    <div ng-app='dh' ng-controller='load' ng-init='loadContacts()'>
 
 </body>
-  <script>
-    window.onload = function() {
-      $.ajax('http://127.0.0.1:6474/employees', {
-        type: 'GET'
-      }).done(function(results) {
-        console.log(results);
+<script>
+  var app = angular.module('dh', []);
+
+  app.controller('load', function($http, $scope) {
+    $scope.loadContacts = function() {
+      $http({
+        url: 'http://127.0.0.1:6474/employees',
+        method: 'GET'
+      }).success(function(data) {
+        console.log(data);     
       });
     };
-  </script>
+
+    $scope.loadSalary = function() {
+
+    };
+  });
+</script>
 </html>

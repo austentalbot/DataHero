@@ -149,6 +149,7 @@ app.get('/employees', function(req, res) {
 
 app.get('*', function(req, res){
   console.log('intercepted other');
+  console.log(req);
   res.status(200).sendFile(__dirname + '/views/employeeUploadView.html');;
 });
 
