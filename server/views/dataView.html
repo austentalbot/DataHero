@@ -1,29 +1,27 @@
 <html>
-<head>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js"></script>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
-  <link href='http://127.0.0.1:6474/style.css' rel='stylesheet' type='text/css'>
-  <script src='http://127.0.0.1:6474/client.js' type='text/javascript'></script>
-</head>
-<body>
-    <h3>Employee salary data</h3>
-    <div ng-app='dh' ng-controller='load' ng-init='loadContacts()'>
-      <h4>{{selected.firstname}} {{selected.lastname}}</h4>
-      <canvas id='chart'></canvas>
-      <br>
-      <div class='salary'>
-        <li ng-repeat='salary in salaryHistory'>
-          {{salary.start_of_salary.slice(0, 10)}} to {{formatEndDate(salary.end_of_salary)}}: <b>{{salary.salary  | currency}}</b>
-        </li>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <link href='http://127.0.0.1:6474/style.css' rel='stylesheet' type='text/css'>
+    <script src='http://127.0.0.1:6474/client.js' type='text/javascript'></script>
+  </head>
+  <body>
+      <h3>Employee salary data</h3>
+      <div ng-app='dh' ng-controller='load' ng-init='loadContacts()'>
+        <h4>{{selected.firstname}} {{selected.lastname}}</h4>
+        <canvas id='chart'></canvas>
+        <br>
+        <div class='salary'>
+          <li ng-repeat='salary in salaryHistory'>
+            {{salary.start_of_salary.slice(0, 10)}} to {{formatEndDate(salary.end_of_salary)}}: <b>{{salary.salary  | currency}}</b>
+          </li>
+        </div>
+        <br>
+        <div ng-repeat='contact in contacts' repeat-complete>
+          <div class='user button' data-firstname='{{contact.firstname}}' data-lastname='{{contact.lastname}}'>{{contact.lastname}}, {{contact.firstname}}</div>
+        </div>
       </div>
-      <br>
-      <div ng-repeat='contact in contacts' repeat-complete>
-        <div class='user button' data-firstname='{{contact.firstname}}' data-lastname='{{contact.lastname}}'>{{contact.lastname}}, {{contact.firstname}}</div>
-      </div>
-
-    </div>
-
-</body>
+  </body>
 </html>

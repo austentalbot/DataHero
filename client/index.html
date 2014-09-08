@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="./bower_components/papa-parse/papaparse.min.js"></script>
-  <!-- <link rel="stylesheet" href="style.css"/> -->
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
-  <script src="app.js"></script>
-</head>
-<body>
-
-    <h3>Upload employee data</h3>
-    <form action="http://127.0.0.1:6474/employee" enctype="multipart/form-data" method="post">
-      <input type="file" name="upload" multiple="multiple"><br>
-      <input type="submit" value="Upload">
-    </form>  
-
-</body>
-
-
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="./bower_components/papa-parse/papaparse.min.js"></script>
+    <!-- <link rel="stylesheet" href="style.css"/> -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <script src="app.js"></script>
+  </head>
+  <body>
+      <h3>Upload employee data</h3>
+      <form action="http://127.0.0.1:6474/employee" enctype="multipart/form-data" method="post">
+        <input type="file" name="upload" multiple="multiple"><br>
+        <input type="submit" value="Upload">
+      </form>  
+  </body>
 </html>
