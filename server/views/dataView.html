@@ -6,18 +6,25 @@
 <body>
     <h4>Employee salary data</h4>
     <div ng-app='dh' ng-controller='load' ng-init='loadContacts()'>
+      <ul ng-repeat='contact in contacts'>
+        <li>{{contact.lastname}}, {{contact.firstname}}</li>
+      </ul>
+
+    </div>
 
 </body>
 <script>
   var app = angular.module('dh', []);
 
   app.controller('load', function($http, $scope) {
+    $scope.contacts = [];
     $scope.loadContacts = function() {
       $http({
         url: 'http://127.0.0.1:6474/employees',
         method: 'GET'
       }).success(function(data) {
         console.log(data);     
+        $scope.contacts = data;
       });
     };
 

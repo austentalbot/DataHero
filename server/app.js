@@ -142,7 +142,7 @@ app.post('/salary', function(req, res){
 });
 
 app.get('/employees', function(req, res) {
-  connection.query('SELECT DISTINCT firstname, lastname from employees;', function(err, rows, fields) {
+  connection.query('SELECT DISTINCT firstname, lastname FROM employees ORDER BY lastname ASC;', function(err, rows, fields) {
     res.status(200).send(rows);
   });  
 });
