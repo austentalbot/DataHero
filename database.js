@@ -22,13 +22,6 @@ var connection = mysql.createPool({
   password: credentials.dbPassword,
   database: credentials.database
 });
-// var connection = mysql.createConnection({
-//   host: credentials.dbHost,
-//   user: credentials.dbUser,
-//   password: credentials.dbPassword,
-//   database: credentials.database
-// });
-// connection.connect();
 
 //database object for export
 database = {
@@ -93,7 +86,7 @@ database = {
                       console.log(err);
                     }
                     console.log('added to db');
-                    res.status(200).sendFile(__dirname + '/views/salaryUploadView.html');;
+                    res.status(200).sendFile(__dirname + '/views/salaryUploadView.html');
                   });
                 });
               });
@@ -150,7 +143,7 @@ database = {
                     console.log('inserted values into salary');
                     // console.log(rows);
                     console.log('added to db');
-                    res.status(200).sendFile(__dirname + '/views/dataView.html');;
+                    res.status(200).sendFile(__dirname + '/views/dataView.html');
                   });
                 });
               });
@@ -158,7 +151,7 @@ database = {
           });
         });
       }
-    });    
+    });
   }
 
 };
