@@ -19,7 +19,7 @@ $scope.formatEndDate = function(date) {
   if (date[0]==='9') {
     return 'Present';
   } else {
-    return date.slice(0, 10);
+    return date.slice(0, 7);
   }
 };
 
@@ -41,7 +41,7 @@ $rootScope.createChart = function(salaryHistory) {
   for (var i=0; i<salaryHistory.length; i++) {
     var salary = salaryHistory[i];
     var label = '';
-    label+=salary.start_of_salary.slice(0, 10);
+    label+=salary.start_of_salary.slice(0, 7);
     label+=' to ';
     label+=$scope.formatEndDate(salary.end_of_salary);
     labels.push(label);
@@ -62,8 +62,10 @@ $rootScope.createChart = function(salaryHistory) {
   };
 
     var options = {
+      scaleFontFamily: "'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+      scaleLabel: "$<%=Number(value).toLocaleString()%>",
       scaleBeginAtZero: true,
-      scaleLabel: "$<%=Number(value).toLocaleString()%>"
+      tooltipEvents: []
     };
 
     var barChart = new Chart(ctx).Bar(data, options);

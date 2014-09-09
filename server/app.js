@@ -4,16 +4,11 @@ var app = express();
 var port = process.env.PORT || 6474;
 var cors=require('cors');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
-var formidable = require('formidable');
-var fs = require('fs');
-var babyparse = require('babyparse');
 var database = require('./database');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
 app.use(bodyParser.json({limit: '50mb'}));
-
 
 app.post('/employee', function(req, res){
   console.log('intercepted employee');
@@ -23,51 +18,7 @@ app.post('/employee', function(req, res){
 
 app.post('/salary', function(req, res){
   console.log('intercepted salary');
-  //parse incoming file
-  // var form = new formidable.IncomingForm();
-  // form.parse(req, function(err, fields, files) {
-  //   if (err) {
-  //     throw err;
-  //   }
-  //   // console.log(files);
-
-  //   fs.readFile(files.upload.path, function (err, csv) {
-  //     if (err) {
-  //       throw err; 
-  //     }
-  //     var csvStr = csv.toString();
-  //     // console.log(csvStr);
-  //     babyparse.parse(csvStr, {
-  //       complete: function(results, file) {
-  //         // console.log(results.data);
-  //         //drop and recreate employees table
-  //         connection.query('DROP TABLE IF EXISTS salaries;', function(err) {
-  //           if (err) {
-  //             throw err;
-  //           }
-  //           connection.query('CREATE TABLE salaries ( \
-  //             employee_id int, \
-  //             salary int, \
-  //             start_of_salary date, \
-  //             end_of_salary date);', function(err) {
-  //             if (err) {
-  //               throw err;
-  //             }
-  //             connection.query('INSERT INTO salaries VALUES ?;', [results.data], function(err, rows, fields) {
-  //               if (err) {
-  //                 throw err;
-  //               }
-  //               // console.log(rows);
-  //               console.log('added to db');
-  //               res.status(200).sendFile(__dirname + '/views/dataView.html');;
-  //             });
-  //           });
-  //         });
-  //       }
-  //     });
-  //   });
-
-  // });
+  //add salary data to db
   database.addSalaryData(req, res);
 });
 
@@ -83,12 +34,20 @@ app.get('/salaryHistory', function(req, res) {
 
 app.get('/style.css', function(req, res){
   console.log('intercepted style.css');
+  //serve up css file
   res.status(200).sendFile(__dirname + '/css/style.css');
 });
 
 app.get('/client.js', function(req, res){
   console.log('intercepted client.js');
+  //serve up js file
   res.status(200).sendFile(__dirname + '/js/client.js');
+});
+
+app.get('/Chart.js', function(req, res){
+  console.log('intercepted chart.js');
+  //serve up Chart.js file
+  res.status(200).sendFile(__dirname + '/js/Chart.js');
 });
 
 app.get('*', function(req, res){
