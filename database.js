@@ -15,20 +15,20 @@ if (process.env.PORT===undefined) {
 }
 
 //connect to database
-// var connection = mysql.createPool({
-//   connectionLimit: 4,
-//   host: credentials.dbHost,
-//   user: credentials.dbUser,
-//   password: credentials.dbPassword,
-//   database: credentials.database
-// });
-var connection = mysql.createConnection({
+var connection = mysql.createPool({
+  connectionLimit: 4,
   host: credentials.dbHost,
   user: credentials.dbUser,
   password: credentials.dbPassword,
   database: credentials.database
 });
-connection.connect();
+// var connection = mysql.createConnection({
+//   host: credentials.dbHost,
+//   user: credentials.dbUser,
+//   password: credentials.dbPassword,
+//   database: credentials.database
+// });
+// connection.connect();
 
 //database object for export
 database = {
