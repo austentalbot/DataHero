@@ -14,7 +14,7 @@ app.factory('Query', function($http) {
     //query salary information
     getSalary: function(firstName, lastName) {
       return $http({
-        url: 'http://127.0.0.1:6474/salaryHistory',
+        url: 'http://dataherohw.azurewebsites.net/salaryHistory',
         method: 'GET',
         params: {firstName: firstName, lastName: lastName}
       });
@@ -74,7 +74,7 @@ app.controller('load', function($http, $scope, $rootScope, Query) {
   $scope.formatEndDate = Query.formatEndDate;
   $scope.loadContacts = function() {
     $http({
-      url: 'http://127.0.0.1:6474/employees',
+      url: 'http://dataherohw.azurewebsites.net/employees',
       method: 'GET'
     }).success(function(data) {
       console.log(data);
