@@ -2,7 +2,7 @@
 
 <b>Hosted link:</b> http://dataherohw.azurewebsites.net/
 
-<b>Github link: https://github.com/austentalbot/datahero
+<b>Github link:</b> https://github.com/austentalbot/datahero
 
 <b>Running:</b> You can interact with the app through the hosted link. You're welcome to also run it locally, but this will require the need to connect to the database and change some of the resource links to point to local directories. Let me know if you want to test it out locally as well, and I can make the adjustments so it will work for you.
 
